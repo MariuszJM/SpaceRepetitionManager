@@ -20,13 +20,27 @@ class TaskScheduler:
 
             for interval in task['intervals']:
                 for _ in range(interval['repetitions']):
+                    initial_task_date = task_date  # Zapisz oryginalną datę zadania
                     task_date += timedelta(days=interval['range'][0])
+
+                    # Dodana logika przenoszenia zadań na kolejny dzień, gdy osiągnięto limit zadań
                     while not self.can_schedule_task(task, task_date):
                         task_date += timedelta(days=1)
+
                         if task_date >= self.event_horizon:
                             break
+
                     if task_date >= self.event_horizon:
                         break
+
+                    # Sprawdzanie, czy zadanie zostało przesunięte poza dozwolony zakres
+                    days_delay = (task_date - initial_task_date).days - interval['range'][0]
+                    if days_delay > interval['range'][1] - interval['range'][0]:
+                        print("============="*4,
+                              f"\nZadanie '{task['name']}' zostało przesunięte o {days_delay} dni, "
+                              f"\nco przekracza dozwolony zakres od {interval['range'][0]} do {interval['range'][1]} dni."
+                              f"\nData zadania: {task_date.strftime('%Y-%m-%d')}.")
+
                     self._add_task_to_schedule(task_date, task)
 
     def can_schedule_task(self, task, task_date):
