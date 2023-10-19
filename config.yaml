@@ -1,4 +1,5 @@
 event_name: "#zadania na dziś"
+max_tasks_per_day: 2
 event_time:
   start: "8:00"
   end: "9:00"
@@ -19,6 +20,34 @@ tasks:
     avoid_days:
       weekdays: [5, 6]
       dates: ["2023-10-25", "2023-10-18"]
+
+  - name: "Ćwiczenie 3"
+    category: "exercise22"
+    start_date: "2023-10-17"
+    intervals:
+      - range: [ 1, 1 ]
+        repetitions: 3
+      - range: [ 2, 4 ]
+        repetitions: 1
+      - range: [ 5, 10 ]
+        repetitions: 1
+    avoid_days:
+      weekdays: [ 5, 6 ]
+      dates: [ "2023-10-25", "2023-10-18" ]
+
+  - name: "Ćwiczenie 2"
+    category: "exercise"
+    start_date: "2023-10-17"
+    intervals:
+      - range: [ 1, 1 ]
+        repetitions: 3
+      - range: [ 2, 4 ]
+        repetitions: 1
+      - range: [ 5, 10 ]
+        repetitions: 1
+    avoid_days:
+      weekdays: [ 5, 6 ]
+      dates: [ "2023-10-25", "2023-10-18" ]
 
   - name: "Czytanie"
     category: "learning"

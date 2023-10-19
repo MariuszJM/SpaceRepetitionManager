@@ -20,15 +20,34 @@ class TaskScheduler:
             for interval in task['intervals']:
                 for _ in range(interval['repetitions']):
                     task_date += timedelta(days=interval['range'][0])
-                    while task_date.weekday() in task['avoid_days']['weekdays'] or any(
-                            t['category'] == task['category'] for t in
-                            self.scheduled_tasks.get(task_date.strftime("%Y-%m-%d"), [])):
+
+                    # Dodana logika przenoszenia zadań na kolejny dzień, gdy osiągnięto limit zadań
+                    while not self.can_schedule_task(task, task_date):
                         task_date += timedelta(days=1)
+
+                        if task_date >= self.event_horizon:
+                            break
+
                     if task_date >= self.event_horizon:
                         break
-                    if task_date.strftime("%Y-%m-%d") in task['avoid_days']['dates']:
-                        task_date += timedelta(days=1)
+
                     self._add_task_to_schedule(task_date, task)
+
+    def can_schedule_task(self, task, task_date):
+        date_str = task_date.strftime("%Y-%m-%d")
+        max_tasks_per_day = self.config.get('max_tasks_per_day', None)
+
+        if task_date.weekday() in task['avoid_days']:
+            return False
+
+        if date_str in self.scheduled_tasks and \
+                (max_tasks_per_day is not None and len(self.scheduled_tasks[date_str]) >= max_tasks_per_day):
+            return False
+
+        if any(t['category'] == task['category'] for t in self.scheduled_tasks.get(date_str, [])):
+            return False
+
+        return True
 
     def _add_task_to_schedule(self, date, task):
         date_str = date.strftime("%Y-%m-%d")
