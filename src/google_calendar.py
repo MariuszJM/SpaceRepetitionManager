@@ -57,7 +57,7 @@ class GoogleCalendar:
                 singleEvents=True,
                 orderBy='startTime'
             ).execute()
-            return events_result.get('summary', [])
+            return events_result.get('items', [])
         except Exception as e:
             print("Wystąpił błąd podczas próby pobrania wydarzeń:", e)
             return []
