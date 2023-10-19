@@ -1,6 +1,7 @@
 import yaml
 from datetime import datetime, timedelta
 
+
 class TaskScheduler:
     def __init__(self, config_file, google_calendar):
         self.config = self.load_config(config_file)
@@ -65,10 +66,8 @@ class TaskScheduler:
         for date_str, tasks in self.scheduled_tasks.items():
             date = datetime.strptime(date_str, "%Y-%m-%d")
             event_description = '\n'.join([f"- {task['name']}" for task in tasks])
-            event_start = date.replace(hour=int(self.config['event_time']['start'].split(':')[0]),
-                                       minute=int(self.config['event_time']['start'].split(':')[1])).isoformat()
-            event_end = date.replace(hour=int(self.config['event_time']['end'].split(':')[0]),
-                                     minute=int(self.config['event_time']['end'].split(':')[1])).isoformat()
+            event_start = date.replace(hour=6, minute=0).isoformat()
+            event_end = date.replace(hour=23, minute=0).isoformat()
 
             existing_events = self.calendar.get_events(event_start, event_end)
             event_exists = False
@@ -77,7 +76,9 @@ class TaskScheduler:
                 if event['summary'] == self.config['event_name']:
                     event_exists = True
                     updated_description = event.get('description', '') + '\n' + event_description
-                    update_body = {'description': updated_description.strip()}
+                    update_body = {'description': updated_description.strip(),
+                                   'start': event['start'],
+                                   'end': event['end']}
                     self.calendar.update_event(event['id'], update_body)
                     break
 
@@ -94,7 +95,7 @@ class TaskScheduler:
         events = self.calendar.get_events(start_date, end_date)
 
         # Filtracja wydarzeń, które zawierają wzorzec w nazwie
-        matching_events = [event for event in events if pattern in event['summary']]
+        matching_events = [event for event in events if pattern in event.get('summary', "(bez tytułu)")]
 
         if not matching_events:
             print("Nie znaleziono wydarzeń pasujących do wzorca.")
@@ -103,7 +104,8 @@ class TaskScheduler:
         # Wyświetlanie wydarzeń do usunięcia
         print("\nZnalezione wydarzenia:")
         for event in matching_events:
-            print(f"- {event['summary']} ({event['start']['dateTime']} - {event['end']['dateTime']})")
+            event_title = event.get('summary', "(bez tytułu)")
+            print(f"- {event_title} ({event['start']['dateTime']} - {event['end']['dateTime']})")
 
         # Prośba o potwierdzenie
         confirm = input("\nCzy na pewno chcesz usunąć powyższe wydarzenia? (t/n): ")
@@ -115,6 +117,7 @@ class TaskScheduler:
             print("Wydarzenia zostały usunięte.")
         else:
             print("Operacja anulowana. Wydarzenia nie zostały usunięte.")
+
     def undo_last_added_tasks(self):
         # implementacja logiki do cofania ostatnio dodanych zadań (może być potrzebne zastosowanie odpowiedniej struktury danych lub zapisywanie informacji o dodanych zadaniach, aby umożliwić ich wycofanie)
         pass
