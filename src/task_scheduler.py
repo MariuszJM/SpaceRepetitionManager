@@ -1,6 +1,7 @@
 import yaml
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
+import os
 
 
 class TaskScheduler:
@@ -9,6 +10,9 @@ class TaskScheduler:
         self.calendar = google_calendar
         self.scheduled_tasks = {}
         self.set_event_horizon()
+        self.last_history_id = ''
+        self.history_dir = self.config.get('history_dir', 'history')
+        os.makedirs(self.history_dir, exist_ok=True)
 
     def load_config(self, config_file):
         with open(config_file, 'r') as file:
@@ -111,6 +115,7 @@ class TaskScheduler:
                 print(f" - {task['name']}")
 
     def add_tasks_to_calendar(self):
+        added_tasks = []
         for date_str, tasks in self.scheduled_tasks.items():
             date = datetime.strptime(date_str, "%Y-%m-%d")
             event_description = '\n'.join([f"- {task['name']}" for task in tasks])
@@ -141,6 +146,18 @@ class TaskScheduler:
                     event_start,
                     event_end
                 )
+            added_tasks.append({
+                'date': date_str,
+                'tasks': [task['name'] for task in tasks],
+                'updated_existing_event': event_exists
+            })
+        self.save_tasks_to_history(added_tasks)
+
+    def save_tasks_to_history(self, tasks):
+        self.last_history_id = datetime.now().strftime("%Y%m%d%H%M%S")
+        history_file = os.path.join(self.history_dir, f'{self.last_history_id}.yaml')
+        with open(history_file, 'w') as file:
+            yaml.dump(tasks, file)
 
     def get_matching_events(self, pattern, start_date, end_date):
         events = self.calendar.get_events(start_date, end_date)
@@ -150,5 +167,34 @@ class TaskScheduler:
         for event in events:
             self.calendar.delete_event(event['id'])
 
-    def undo_last_added_tasks(self):
-        pass
+    def undo_added_tasks(self, history_id):
+        history_file = os.path.join(self.history_dir, f'{history_id}.yaml')
+        if not os.path.exists(history_file):
+            print(f"Nie znaleziono pliku historii o ID {history_id}")
+            return
+
+        with open(history_file, 'r') as file:
+            tasks = yaml.safe_load(file)
+
+        for task_info in tasks:
+            date = datetime.strptime(task_info['date'], "%Y-%m-%d").replace(hour=0, minute=0).isoformat()
+            end_date = datetime.strptime(task_info['date'], "%Y-%m-%d").replace(hour=23, minute=59).isoformat()
+            existing_day_events = self.calendar.get_events(date, end_date)
+
+            for event in existing_day_events:
+                if event['summary'] == self.config['event_name']:
+                    if task_info['updated_existing_event']:
+                        # Zaktualizuj opis wydarzenia, aby usunąć ostatnio dodane zadania
+                        original_description = event.get('description', '').split('\n')
+                        updated_description = '\n'.join(original_description[:-len(task_info['tasks'])]).strip()
+                        update_body = {'description': updated_description,
+                                       'start': event['start'],
+                                       'end': event['end'],
+                                       'summary': self.config['event_name']}
+                        self.calendar.update_event(event['id'], update_body)
+                    else:
+                        # Usuń wydarzenie, jeśli zostało utworzone w ostatniej operacji
+                        self.calendar.delete_event(event['id'])
+                    break
+            else:
+                print(f"Nie można odnaleźć wydarzenia dla daty {task_info['date']}")

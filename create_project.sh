@@ -25,10 +25,10 @@ from datetime import datetime, timedelta
 echo 'from google_calendar import GoogleCalendar
 from task_scheduler import TaskScheduler
 
-# Zawartość pliku main.py
+# Zawartość pliku main_add_tasks.py
 # ...
 
-' > main.py
+' > main_add_tasks.py
 
 # Utworzenie pliku konfiguracyjnego YAML
 echo 'event_name: "#zadania na dziś"
@@ -66,7 +66,7 @@ tasks:
       dates: []
 ' > config.yaml
 
-# Nadanie uprawnień wykonywalnych dla pliku main.py
-chmod +x main.py
+# Nadanie uprawnień wykonywalnych dla pliku main_add_tasks.py
+chmod +x main_add_tasks.py
 
 echo "Projekt został stworzony!"
