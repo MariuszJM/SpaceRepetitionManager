@@ -1,4 +1,5 @@
 event_name: "#zadania na dziś"
+task_phrase: "Zadania"
 max_tasks_per_day: 2
 event_time:
   start: "8:00"

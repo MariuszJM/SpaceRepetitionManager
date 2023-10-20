@@ -1,5 +1,6 @@
 import yaml
 from datetime import datetime, timedelta
+from bs4 import BeautifulSoup
 
 
 class TaskScheduler:
@@ -36,12 +37,17 @@ class TaskScheduler:
                     # Sprawdzanie, czy zadanie zostało przesunięte poza dozwolony zakres
                     days_delay = (task_date - initial_task_date).days - interval['range'][0]
                     if days_delay > interval['range'][1] - interval['range'][0]:
-                        print("============="*4,
+                        print("=============" * 4,
                               f"\nZadanie '{task['name']}' zostało przesunięte o {days_delay} dni, "
                               f"\nco przekracza dozwolony zakres od {interval['range'][0]} do {interval['range'][1]} dni."
                               f"\nData zadania: {task_date.strftime('%Y-%m-%d')}.")
 
                     self._add_task_to_schedule(task_date, task)
+
+    def count_tasks_in_description(self, description):
+        soup = BeautifulSoup(description, 'html.parser')
+        tasks = soup.find_all('li')  # znajduje wszystkie elementy listy
+        return len(tasks)
 
     def can_schedule_task(self, task, task_date):
         date_str = task_date.strftime("%Y-%m-%d")
@@ -53,9 +59,19 @@ class TaskScheduler:
         if task_date in task['avoid_days'].get('dates', []):
             return False
 
-        if date_str in self.scheduled_tasks and \
-                (max_tasks_per_day is not None and len(self.scheduled_tasks[date_str]) >= max_tasks_per_day):
-            return False
+        if max_tasks_per_day is not None:
+            event_start = task_date.replace(hour=0, minute=0).isoformat()
+            event_end = task_date.replace(hour=23, minute=59).isoformat()
+            existing_events = self.calendar.get_events(event_start, event_end)
+            total_tasks_for_the_day = sum(
+                self.count_tasks_in_description(event['description'])
+                for event in existing_events
+                if self.config['task_phrase'] in event.get('summary', '')
+                and date_str in event['start']['dateTime']
+            ) + len(self.scheduled_tasks.get(date_str, []))
+
+            if total_tasks_for_the_day >= max_tasks_per_day:
+                return False
 
         if any(t['category'] == task['category'] for t in self.scheduled_tasks.get(date_str, [])):
             return False
@@ -78,19 +94,23 @@ class TaskScheduler:
         for date_str, tasks in self.scheduled_tasks.items():
             date = datetime.strptime(date_str, "%Y-%m-%d")
             event_description = '\n'.join([f"- {task['name']}" for task in tasks])
-            event_start = date.replace(hour=6, minute=0).isoformat()
-            event_end = date.replace(hour=23, minute=0).isoformat()
-
-            existing_events = self.calendar.get_events(event_start, event_end)
+            event_start = date.replace(hour=int(self.config['event_time']['start'].split(':')[0]),
+                                       minute=int(self.config['event_time']['start'].split(':')[1])).isoformat()
+            event_end = date.replace(hour=int(self.config['event_time']['start'].split(':')[0]),
+                                     minute=int(self.config['event_time']['start'].split(':')[1])).isoformat()
+            existing_day_events = self.calendar.get_events(date.replace(hour=0, minute=0).isoformat(),
+                                                           date.replace(hour=23, minute=59).isoformat())
             event_exists = False
 
-            for event in existing_events:
+            for event in existing_day_events:
                 if event['summary'] == self.config['event_name']:
                     event_exists = True
-                    updated_description = event.get('description', '') + '\n' + event_description
+                    original_description = event.get('description', '')  # Zapisanie oryginalnego opisu
+                    updated_description = original_description + '\n' + event_description
                     update_body = {'description': updated_description.strip(),
                                    'start': event['start'],
-                                   'end': event['end']}
+                                   'end': event['end'],
+                                   'summary':self.config['event_name']}
                     self.calendar.update_event(event['id'], update_body)
                     break
 
@@ -107,7 +127,7 @@ class TaskScheduler:
         events = self.calendar.get_events(start_date, end_date)
 
         # Filtracja wydarzeń, które zawierają wzorzec w nazwie
-        matching_events = [event for event in events if pattern in event.get('summary', "(bez tytułu)")]
+        matching_events = [event for event in events if pattern in event.get('summary', "(Bez tytułu)")]
 
         if not matching_events:
             print("Nie znaleziono wydarzeń pasujących do wzorca.")
@@ -116,7 +136,7 @@ class TaskScheduler:
         # Wyświetlanie wydarzeń do usunięcia
         print("\nZnalezione wydarzenia:")
         for event in matching_events:
-            event_title = event.get('summary', "(bez tytułu)")
+            event_title = event.get('summary', "(Bez tytułu)")
             print(f"- {event_title} ({event['start']['dateTime']} - {event['end']['dateTime']})")
 
         # Prośba o potwierdzenie

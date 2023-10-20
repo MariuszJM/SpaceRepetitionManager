@@ -13,7 +13,7 @@ def main():
     task_scheduler = TaskScheduler(config_file, google_calendar)
 
     # Planowanie zadań
-    task_scheduler.delete_events_with_pattern(pattern="(bez tytułu)", start_date="2023-10-10", end_date="2023-11-20")
+    task_scheduler.delete_events_with_pattern(pattern="#zadania na dziś", start_date="2023-10-10", end_date="2023-12-20")
 
 if __name__ == "__main__":
     main()
