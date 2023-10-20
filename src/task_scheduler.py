@@ -142,26 +142,13 @@ class TaskScheduler:
                     event_end
                 )
 
-    def delete_events_with_pattern(self, pattern, start_date, end_date):
+    def get_matching_events(self, pattern, start_date, end_date):
         events = self.calendar.get_events(start_date, end_date)
-        matching_events = [event for event in events if pattern in event.get('summary', "(Bez tytułu)")]
-        if not matching_events:
-            print("Nie znaleziono wydarzeń pasujących do wzorca.")
-            return
+        return [event for event in events if pattern in event.get('summary', "(Bez tytułu)")]
 
-        print("\nZnalezione wydarzenia:")
-        for event in matching_events:
-            event_title = event.get('summary', "(Bez tytułu)")
-            print(f"- {event_title} ({event['start']['dateTime']} - {event['end']['dateTime']})")
-
-        confirm = input("\nCzy na pewno chcesz usunąć powyższe wydarzenia? (t/n): ")
-
-        if confirm.lower() == 't':
-            for event in matching_events:
-                self.calendar.delete_event(event['id'])
-            print("Wydarzenia zostały usunięte.")
-        else:
-            print("Operacja anulowana. Wydarzenia nie zostały usunięte.")
+    def delete_events(self, events):
+        for event in events:
+            self.calendar.delete_event(event['id'])
 
     def undo_last_added_tasks(self):
         pass
