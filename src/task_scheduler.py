@@ -198,3 +198,8 @@ class TaskScheduler:
                     break
             else:
                 print(f"Nie można odnaleźć wydarzenia dla daty {task_info['date']}")
+        try:
+            os.remove(history_file)
+            print(f"Plik historii {history_file} został usunięty.")
+        except Exception as e:
+            print(f"Nie udało się usunąć pliku historii {history_file}. Błąd: {e}")
