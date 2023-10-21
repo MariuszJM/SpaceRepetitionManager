@@ -1,7 +1,7 @@
 from datetime import datetime
 from src.google_calendar import GoogleCalendar
 from src.task_scheduler import TaskScheduler
-from src.utils import get_files_before_datetime, display_aggregated_undo_changes  # Import utility functions
+from src.utils import get_files_before_datetime
 from src.data_presenter import DataPresenter
 
 TARGET_DATETIME = datetime(2023, 10, 21, 16, 49)
@@ -17,8 +17,8 @@ def main():
     history_files_before_datetime = get_files_before_datetime(TARGET_DATETIME)
 
     print("Spodziewane zmiany:")
-    display_aggregated_undo_changes(history_files_before_datetime)
-
+    aggregated_changes = task_scheduler.aggregate_undo_changes(history_files_before_datetime)
+    data_presenter.display_aggregated_undo_changes(aggregated_changes)
     choice = input("Czy chcesz zatwierdzić te zmiany? (t/n): ").strip().lower()
 
     if choice == 't':

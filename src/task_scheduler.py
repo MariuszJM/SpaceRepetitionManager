@@ -2,6 +2,7 @@ import yaml
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 import os
+from collections import defaultdict
 
 
 class TaskScheduler:
@@ -234,3 +235,15 @@ class TaskScheduler:
             print(f"Plik historii {history_file} został usunięty.")
         except Exception as e:
             print(f"Nie udało się usunąć pliku historii {history_file}. Błąd: {e}")
+
+    def aggregate_undo_changes(self, files):
+        folder_path = self.history_dir
+        aggregated_changes = defaultdict(list)
+
+        for file in files:
+            with open(os.path.join(folder_path, file), 'r') as f:
+                tasks = yaml.safe_load(f)
+                for task in tasks:
+                    aggregated_changes[task['date']].append(task)
+
+        return aggregated_changes

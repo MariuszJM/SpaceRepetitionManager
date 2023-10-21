@@ -1,6 +1,6 @@
 from src.google_calendar import GoogleCalendar
 from src.task_scheduler import TaskScheduler
-from src.utils import get_last_n_files, display_aggregated_undo_changes  # Import utility functions
+from src.utils import get_last_n_files
 from src.data_presenter import DataPresenter
 
 LAST_N = 1
@@ -16,8 +16,8 @@ def main():
     last_n_files = get_last_n_files(LAST_N)
 
     print("Spodziewane zmiany:")
-    display_aggregated_undo_changes(last_n_files)
-
+    aggregated_changes = task_scheduler.aggregate_undo_changes(last_n_files)
+    data_presenter.display_aggregated_undo_changes(aggregated_changes)
     choice = input("Czy chcesz zatwierdzić te zmiany? (t/n): ").strip().lower()
 
     if choice == 't':
