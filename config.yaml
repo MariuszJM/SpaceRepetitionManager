@@ -1,7 +1,7 @@
-event_name: "#zadania na dziś"
+event_name: "#Zadania na dziś"
 task_phrase: "Zadania"
 history_dir: 'history'
-max_tasks_per_day: 2
+max_tasks_per_day: 12
 event_time:
   start: "8:00"
   end: "9:00"
