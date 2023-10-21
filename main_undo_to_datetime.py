@@ -2,6 +2,7 @@ from datetime import datetime
 from src.google_calendar import GoogleCalendar
 from src.task_scheduler import TaskScheduler
 from src.utils import get_files_before_datetime, display_aggregated_undo_changes  # Import utility functions
+from src.data_presenter import DataPresenter
 
 TARGET_DATETIME = datetime(2023, 10, 21, 16, 49)
 CREDENTIALS_FILE = 'credentials.json'
@@ -10,7 +11,8 @@ CONFIG_FILE = 'config.yaml'
 
 def main():
     google_calendar = GoogleCalendar(calendar_id=CALENDAR_ID, credentials_file=CREDENTIALS_FILE)
-    task_scheduler = TaskScheduler(CONFIG_FILE, google_calendar)
+    data_presenter = DataPresenter()
+    task_scheduler = TaskScheduler(CONFIG_FILE, google_calendar, data_presenter)
 
     history_files_before_datetime = get_files_before_datetime(TARGET_DATETIME)
 

@@ -1,5 +1,6 @@
 from src.google_calendar import GoogleCalendar
 from src.task_scheduler import TaskScheduler
+from src.data_presenter import DataPresenter
 
 CREDENTIALS_FILE = 'credentials.json'
 CALENDAR_ID = 'mariusz.michna.j@gmail.com'
@@ -7,7 +8,8 @@ CONFIG_FILE = 'config.yaml'
 
 def main():
     google_calendar = GoogleCalendar(calendar_id=CALENDAR_ID, credentials_file=CREDENTIALS_FILE)
-    task_scheduler = TaskScheduler(CONFIG_FILE, google_calendar)
+    data_presenter = DataPresenter()
+    task_scheduler = TaskScheduler(CONFIG_FILE, google_calendar, data_presenter)
     task_scheduler.create_scheduled_tasks()
     print("Zaplanowane zadania:")
     task_scheduler.display_scheduled_tasks()

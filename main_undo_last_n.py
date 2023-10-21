@@ -1,6 +1,7 @@
 from src.google_calendar import GoogleCalendar
 from src.task_scheduler import TaskScheduler
 from src.utils import get_last_n_files, display_aggregated_undo_changes  # Import utility functions
+from src.data_presenter import DataPresenter
 
 LAST_N = 1
 CREDENTIALS_FILE = 'credentials.json'
@@ -9,7 +10,8 @@ CONFIG_FILE = 'config.yaml'
 
 def main():
     google_calendar = GoogleCalendar(calendar_id=CALENDAR_ID, credentials_file=CREDENTIALS_FILE)
-    task_scheduler = TaskScheduler(CONFIG_FILE, google_calendar)
+    data_presenter = DataPresenter()
+    task_scheduler = TaskScheduler(CONFIG_FILE, google_calendar, data_presenter)
 
     last_n_files = get_last_n_files(LAST_N)
 

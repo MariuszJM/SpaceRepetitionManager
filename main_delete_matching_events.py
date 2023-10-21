@@ -1,5 +1,6 @@
 from src.google_calendar import GoogleCalendar
 from src.task_scheduler import TaskScheduler
+from src.data_presenter import DataPresenter
 
 
 def display_matching_events(matching_events):
@@ -27,9 +28,10 @@ def main():
     credentials_file = 'credentials.json'
     calendar_id = 'mariusz.michna.j@gmail.com'
     config_file = 'config.yaml'
+    data_presenter = DataPresenter()
 
     google_calendar = GoogleCalendar(calendar_id=calendar_id, credentials_file=credentials_file)
-    task_scheduler = TaskScheduler(config_file, google_calendar)
+    task_scheduler = TaskScheduler(config_file, google_calendar, data_presenter)
 
     matching_events = task_scheduler.get_matching_events(
         pattern="#zadania na dziś",
