@@ -2,10 +2,10 @@ from src.google_calendar import GoogleCalendar
 from src.task_scheduler import TaskScheduler
 from src.utils import get_last_n_files, display_aggregated_undo_changes  # Import utility functions
 
+LAST_N = 1
 CREDENTIALS_FILE = 'credentials.json'
 CALENDAR_ID = 'mariusz.michna.j@gmail.com'
 CONFIG_FILE = 'config.yaml'
-LAST_N = 1
 
 def main():
     google_calendar = GoogleCalendar(calendar_id=CALENDAR_ID, credentials_file=CREDENTIALS_FILE)

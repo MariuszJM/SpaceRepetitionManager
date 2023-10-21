@@ -114,45 +114,6 @@ class TaskScheduler:
             for task in tasks:
                 print(f" - {task['name']}")
 
-    def add_tasks_to_calendar(self):
-        added_tasks = []
-        for date_str, tasks in self.scheduled_tasks.items():
-            date = datetime.strptime(date_str, "%Y-%m-%d")
-            event_description = '\n'.join([f"- {task['name']}" for task in tasks])
-            event_start = date.replace(hour=int(self.config['event_time']['start'].split(':')[0]),
-                                       minute=int(self.config['event_time']['start'].split(':')[1])).isoformat()
-            event_end = date.replace(hour=int(self.config['event_time']['start'].split(':')[0]),
-                                     minute=int(self.config['event_time']['start'].split(':')[1])).isoformat()
-            existing_day_events = self.calendar.get_events(date.replace(hour=0, minute=0).isoformat(),
-                                                           date.replace(hour=23, minute=59).isoformat())
-            event_exists = False
-
-            for event in existing_day_events:
-                if event['summary'] == self.config['event_name']:
-                    event_exists = True
-                    original_description = event.get('description', '')
-                    updated_description = original_description + '\n' + event_description
-                    update_body = {'description': updated_description.strip(),
-                                   'start': event['start'],
-                                   'end': event['end'],
-                                   'summary': self.config['event_name']}
-                    self.calendar.update_event(event['id'], update_body)
-                    break
-
-            if not event_exists:
-                self.calendar.create_event(
-                    self.config['event_name'],
-                    event_description,
-                    event_start,
-                    event_end
-                )
-            added_tasks.append({
-                'date': date_str,
-                'tasks': [task['name'] for task in tasks],
-                'updated_existing_event': event_exists
-            })
-        self.save_tasks_to_history(added_tasks)
-
     def save_tasks_to_history(self, tasks):
         self.last_history_id = datetime.now().strftime("%Y%m%d%H%M%S")
         history_file = os.path.join(self.history_dir, f'{self.last_history_id}.yaml')
@@ -167,8 +128,30 @@ class TaskScheduler:
         for event in events:
             self.calendar.delete_event(event['id'])
 
+    def add_tasks_to_calendar(self):
+        added_tasks = []
+        for date_str, tasks in self.scheduled_tasks.items():
+            date = datetime.strptime(date_str, "%Y-%m-%d")
+            event_description = self._create_event_description(tasks)
+            event_start_end_time = self._get_event_start_end_time(date)
+            event_exists, existing_day_events = self._get_existing_day_events(date)
+
+            if event_exists:
+                self._update_existing_event(existing_day_events, event_description)
+            else:
+                self.calendar.create_event(
+                    self.config['event_name'],
+                    event_description,
+                    *event_start_end_time
+                )
+
+            added_tasks.append(self._prepare_added_tasks_record(date_str, tasks, event_exists))
+
+        self.save_tasks_to_history(added_tasks)
+
     def undo_added_tasks(self, history_id):
         history_file = os.path.join(self.history_dir, f'{history_id}.yaml')
+
         if not os.path.exists(history_file):
             print(f"Nie znaleziono pliku historii o ID {history_id}")
             return
@@ -177,27 +160,77 @@ class TaskScheduler:
             tasks = yaml.safe_load(file)
 
         for task_info in tasks:
-            date = datetime.strptime(task_info['date'], "%Y-%m-%d").replace(hour=0, minute=0).isoformat()
-            end_date = datetime.strptime(task_info['date'], "%Y-%m-%d").replace(hour=23, minute=59).isoformat()
-            existing_day_events = self.calendar.get_events(date, end_date)
+            date, end_date, existing_day_events = self._prepare_undo_data(task_info['date'])
 
             for event in existing_day_events:
                 if event['summary'] == self.config['event_name']:
-                    if task_info['updated_existing_event']:
-                        # Zaktualizuj opis wydarzenia, aby usunąć ostatnio dodane zadania
-                        original_description = event.get('description', '').split('\n')
-                        updated_description = '\n'.join(original_description[:-len(task_info['tasks'])]).strip()
-                        update_body = {'description': updated_description,
-                                       'start': event['start'],
-                                       'end': event['end'],
-                                       'summary': self.config['event_name']}
-                        self.calendar.update_event(event['id'], update_body)
-                    else:
-                        # Usuń wydarzenie, jeśli zostało utworzone w ostatniej operacji
-                        self.calendar.delete_event(event['id'])
+                    self._process_event_undo(task_info, event)
                     break
             else:
                 print(f"Nie można odnaleźć wydarzenia dla daty {task_info['date']}")
+
+        self._delete_history_file(history_file)
+
+    def _create_event_description(self, tasks):
+        return '\n'.join([f"- {task['name']}" for task in tasks])
+
+    def _get_event_start_end_time(self, date):
+        start_hour, start_minute = map(int, self.config['event_time']['start'].split(':'))
+        return (
+            date.replace(hour=start_hour, minute=start_minute).isoformat(),
+            date.replace(hour=start_hour, minute=start_minute).isoformat()
+        )
+
+    def _get_existing_day_events(self, date):
+        existing_day_events = self.calendar.get_events(
+            date.replace(hour=0, minute=0).isoformat(),
+            date.replace(hour=23, minute=59).isoformat()
+        )
+        event_exists = any(event['summary'] == self.config['event_name'] for event in existing_day_events)
+        return event_exists, existing_day_events
+
+    def _update_existing_event(self, existing_day_events, event_description):
+        for event in existing_day_events:
+            if event['summary'] == self.config['event_name']:
+                original_description = event.get('description', '')
+                updated_description = original_description.strip() + '\n' + event_description.strip()
+                update_body = {
+                    'description': updated_description,
+                    'start': event['start'],
+                    'end': event['end'],
+                    'summary': self.config['event_name']
+                }
+                self.calendar.update_event(event['id'], update_body)
+                break
+
+    def _prepare_added_tasks_record(self, date_str, tasks, event_exists):
+        return {
+            'date': date_str,
+            'tasks': [task['name'] for task in tasks],
+            'updated_existing_event': event_exists
+        }
+
+    def _prepare_undo_data(self, task_info_date):
+        date = datetime.strptime(task_info_date, "%Y-%m-%d").replace(hour=0, minute=0).isoformat()
+        end_date = datetime.strptime(task_info_date, "%Y-%m-%d").replace(hour=23, minute=59).isoformat()
+        existing_day_events = self.calendar.get_events(date, end_date)
+        return date, end_date, existing_day_events
+
+    def _process_event_undo(self, task_info, event):
+        if task_info['updated_existing_event']:
+            original_description = event.get('description', '').split('\n')
+            updated_description = '\n'.join(original_description[:-len(task_info['tasks'])]).strip()
+            update_body = {
+                'description': updated_description,
+                'start': event['start'],
+                'end': event['end'],
+                'summary': self.config['event_name']
+            }
+            self.calendar.update_event(event['id'], update_body)
+        else:
+            self.calendar.delete_event(event['id'])
+
+    def _delete_history_file(self, history_file):
         try:
             os.remove(history_file)
             print(f"Plik historii {history_file} został usunięty.")
