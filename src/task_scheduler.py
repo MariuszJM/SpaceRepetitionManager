@@ -111,7 +111,7 @@ class TaskScheduler:
         self.scheduled_tasks[date_str].append(task)
 
     def display_scheduled_tasks(self):
-        self.data_presenter.display_scheduled_tasks(self.scheduled_tasks)
+        self.data_presenter.display_tasks(self.scheduled_tasks)
 
     def save_tasks_to_history(self, tasks):
         self.last_history_id = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -247,3 +247,14 @@ class TaskScheduler:
                     aggregated_changes[task['date']].append(task)
 
         return aggregated_changes
+
+    def get_files_before_datetime(self, target_datetime):
+        folder_path = 'history'
+        files = [f for f in os.listdir(folder_path) if f.endswith('.yaml')
+                 and datetime.strptime(f.replace('.yaml', ''), "%Y%m%d%H%M%S") > target_datetime]
+        return sorted(files, reverse=True)
+
+    def get_last_n_files(self, n):
+        folder_path = 'history'
+        files = [f for f in os.listdir(folder_path) if f.endswith('.yaml')]
+        return sorted(files, reverse=True)[:n]
