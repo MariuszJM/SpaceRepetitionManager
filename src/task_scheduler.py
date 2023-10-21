@@ -32,7 +32,7 @@ class TaskScheduler:
         task_date = start_date
 
         for interval in task['intervals']:
-            self.schedule_task_for_interval(task, interval, task_date)
+            task_date = self.schedule_task_for_interval(task, interval, task_date)
 
     def schedule_task_for_interval(self, task, interval, task_date):
         for _ in range(interval['repetitions']):
@@ -42,10 +42,11 @@ class TaskScheduler:
             task_date = self.get_next_task_date(task, task_date)
 
             if task_date is None:
-                return
+                return task_date
 
             self.check_task_delay(task, interval, task_date, initial_task_date)
             self._add_task_to_schedule(task_date, task)
+        return task_date
 
     def get_next_task_date(self, task, task_date):
         while not self.can_schedule_task(task, task_date):
