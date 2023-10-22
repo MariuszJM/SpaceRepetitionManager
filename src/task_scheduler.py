@@ -198,7 +198,8 @@ class TaskScheduler:
                     'description': updated_description,
                     'start': event['start'],
                     'end': event['end'],
-                    'summary': self.config['event_name']
+                    'summary': self.config['event_name'],
+                    'colorId': event['colorId']
                 }
                 self.calendar.update_event(event['id'], update_body)
                 break
@@ -224,7 +225,8 @@ class TaskScheduler:
                 'description': updated_description,
                 'start': event['start'],
                 'end': event['end'],
-                'summary': self.config['event_name']
+                'summary': self.config['event_name'],
+                'colorId': event['colorId']
             }
             self.calendar.update_event(event['id'], update_body)
         else:

@@ -41,7 +41,8 @@ class GoogleCalendar:
             'end': {
                 'dateTime': end_time,
                 'timeZone': 'Europe/Warsaw',
-            }
+            },
+            'colorId': '8'
         }
 
         created_event = self.service.events().insert(calendarId=self.calendar_id, body=event).execute()

@@ -2,7 +2,7 @@ from src.google_calendar import GoogleCalendar
 from src.task_scheduler import TaskScheduler
 from src.data_presenter import DataPresenter
 
-LAST_N = 2
+LAST_N = 1
 CREDENTIALS_FILE = 'credentials.json'
 CALENDAR_ID = 'mariusz.michna.j@gmail.com'
 CONFIG_FILE = 'config.yaml'
