@@ -21,7 +21,7 @@ class TaskScheduler:
             return yaml.safe_load(file)
 
     def set_event_horizon(self):
-        self.event_horizon = datetime.now() + timedelta(days=int(self.config['horyzont_zdarzen']))
+        self.event_horizon = datetime.fromisoformat(self.config['event_horizon'])
 
     def create_scheduled_tasks(self):
         for task in self.config['tasks']:
@@ -51,10 +51,10 @@ class TaskScheduler:
     def get_next_task_date(self, task, task_date):
         while not self.can_schedule_task(task, task_date):
             task_date += timedelta(days=1)
-
-            if task_date >= self.event_horizon:
+            if task_date > self.event_horizon:
                 return None
-
+        if task_date > self.event_horizon:
+            return None
         return task_date
 
     def check_task_delay(self, task, interval, task_date, initial_task_date):

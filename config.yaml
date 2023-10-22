@@ -1,65 +1,55 @@
 event_name: "#Zadania na dziś"
-task_phrase: "Zadania"
+task_phrase: "XXX"
 history_dir: 'history'
-max_tasks_per_day: 12
+max_tasks_per_day: 21
 event_time:
   start: "8:00"
   end: "9:00"
 
-horyzont_zdarzen: 42
+event_horizon: "2023-11-30"
 
 tasks:
-  - name: "Ćwiczenie 166"
+  - name: "Biceps Długa, Triceps Długa, Górne Pośladki, Pompki Podwyższenie"
     category: "exercise"
     start_date: "2023-10-17"
     intervals:
-      - range: [1, 1]
-        repetitions: 3
-      - range: [2, 4]
-        repetitions: 1
-      - range: [5, 10]
-        repetitions: 1
+      - range: [7, 7]
+        repetitions: 6
     avoid_days:
-      weekdays: [5, 6]
-      dates: ["2023-10-18"]
+      weekdays: [1,2,3,4,5,6]
 
-  - name: "Ćwiczenie 3666"
+  - name: "Barki, Całe Pośladki"
     category: "exercise"
-    start_date: "2023-10-17"
+    start_date: "2023-10-18"
     intervals:
-      - range: [ 1, 1 ]
-        repetitions: 3
-      - range: [ 2, 4 ]
-        repetitions: 1
-      - range: [ 5, 10 ]
-        repetitions: 1
+      - range: [7, 7]
+        repetitions: 6
     avoid_days:
-      weekdays: [ 5, 6 ]
-      dates: [ "2023-10-25" ]
+      weekdays: [0,2,3,4,5,6]
 
-  - name: "Ćwiczenie 6662"
+  - name: "45min Z2 + Podciąganie"
     category: "exercise"
-    start_date: "2023-10-17"
+    start_date: "2023-10-19"
     intervals:
-      - range: [ 1, 1 ]
-        repetitions: 3
-      - range: [ 2, 4 ]
-        repetitions: 1
-      - range: [ 5, 10 ]
-        repetitions: 1
+      - range: [7, 7]
+        repetitions: 6
     avoid_days:
-      weekdays: [ 5, 6 ]
-      dates: []
+      weekdays: [0,1,3,4,5,6]
 
-  - name: "Czytani66e"
-    category: "learning"
-    start_date: "2023-10-17"
+  - name: "Pompki, Triceps Własny Ciężar, Jednonoga Przysiady"
+    category: "exercise"
+    start_date: "2023-10-20"
     intervals:
-      - range: [1, 1]
-        repetitions: 2
-      - range: [3, 5]
-        repetitions: 1
+      - range: [7, 7]
+        repetitions: 6
     avoid_days:
-      weekdays: [6]
-      dates: []
+      weekdays: [0,1,2,4,5,6]
 
+  - name: "Barki, Biceps Krótka"
+    category: "exercise"
+    start_date: "2023-10-21"
+    intervals:
+      - range: [7, 7]
+        repetitions: 6
+    avoid_days:
+      weekdays: [0,1,2,3,5,6]
