@@ -5,13 +5,13 @@ max_tasks_per_day: 8
 event_time:
   start: "8:00"
   end: "9:00"
-
+$START_DATE: "2023-11-22"
 event_horizon: "2023-12-06"
 
 tasks:
   - name: "Zasada 5 sekund"
     category: "1"
-    start_date: "2023-10-22"
+    start_date: $START_DATE
     intervals:
       - range: [1, 1]
         repetitions: 1
@@ -27,7 +27,7 @@ tasks:
 
   - name: "Nie oczekuj nagrody - nie szukaj nagród. Pozbądź się pleasure seeking behaviour"
     category: "2"
-    start_date: "2023-10-22"
+    start_date: $START_DATE
     intervals:
       - range: [1, 1]
         repetitions: 1

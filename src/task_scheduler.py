@@ -18,7 +18,24 @@ class TaskScheduler:
 
     def load_config(self, config_file):
         with open(config_file, 'r') as file:
-            return yaml.safe_load(file)
+            config_raw = yaml.safe_load(file)
+            config = self.interpolate_config(config_raw)
+            return config
+
+    def interpolate_config(self, config):
+        global_vars = {k: v for k, v in config.items() if k.startswith("$")}
+
+        def interpolate_value(value):
+            if isinstance(value, str) and value.startswith("$"):
+                return global_vars.get(value, value)  # Zwróć wartość zmiennej globalnej lub oryginalną wartość
+            elif isinstance(value, list):
+                return [interpolate_value(v) for v in value]
+            elif isinstance(value, dict):
+                return {k: interpolate_value(v) for k, v in value.items()}
+            else:
+                return value
+
+        return interpolate_value(config)
 
     def set_event_horizon(self):
         self.event_horizon = datetime.fromisoformat(self.config['event_horizon'])
@@ -32,7 +49,8 @@ class TaskScheduler:
         task_date = start_date
 
         for interval in task['intervals']:
-            task_date = self.schedule_task_for_interval(task, interval, task_date)
+            if task_date is not None:
+                task_date = self.schedule_task_for_interval(task, interval, task_date)
 
     def schedule_task_for_interval(self, task, interval, task_date):
         for _ in range(interval['repetitions']):
