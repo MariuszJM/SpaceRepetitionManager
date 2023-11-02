@@ -76,9 +76,9 @@ class TaskScheduler:
         return task_date
 
     def check_and_display_task_delay(self, task, interval, task_date, initial_task_date):
-        days_delay = (task_date - initial_task_date).days - interval['range'][0]
-        if days_delay > interval['range'][1] - interval['range'][0]:
-            self.data_presenter.display_task_delay(task['name'], days_delay, interval['range'], task_date)
+        days_to_next_event = (task_date - initial_task_date).days
+        if days_to_next_event > interval['range'][1]:
+            self.data_presenter.display_task_delay(task['name'], days_to_next_event, interval['range'], task_date)
 
     def can_schedule_task(self, task, task_date):
         return (self.is_date_available(task, task_date) and

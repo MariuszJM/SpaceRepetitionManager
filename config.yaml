@@ -28,7 +28,7 @@ tasks:
     category: "1"
     start_date: $START_DATE
     intervals:
-      - range: [1, 1]
+      - range: [7, 8]
         repetitions: 1
       - range: [2, 4]
         repetitions: 1
