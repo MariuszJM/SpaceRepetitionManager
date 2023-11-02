@@ -45,11 +45,13 @@ class DataPresenter:
         return rows
 
     def display_task_delay(self, task_name, days_delay, allowed_range, task_date):
+        formatted_task_name = self.replace_spaces_with_underscores(task_name)
+        formatted_task_date = task_date.strftime('%Y_%m_%d')
         print(
             "=============" * 4,
-            f"\nZadanie '{task_name}' zostało przesunięte o {days_delay} dni,",
+            f"\nZadanie '{formatted_task_name}' zostało przesunięte o {days_delay} dni,",
             f"\nco przekracza dozwolony zakres od {allowed_range[0]} do {allowed_range[1]} dni.",
-            f"\nData zadania: {task_date.strftime('%Y-%m-%d')}."
+            f"\nData zadania: {formatted_task_date}."
         )
 
     def format_content(self, date_str, tasks_data):
