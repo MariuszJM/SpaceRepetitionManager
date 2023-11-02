@@ -62,7 +62,7 @@ class TaskScheduler:
             if task_date is None:
                 return task_date
 
-            self.check_task_delay(task, interval, task_date, initial_task_date)
+            self.check_and_display_task_delay(task, interval, task_date, initial_task_date)
             self._add_task_to_schedule(task_date, task)
         return task_date
 
@@ -75,16 +75,10 @@ class TaskScheduler:
             return None
         return task_date
 
-    def check_task_delay(self, task, interval, task_date, initial_task_date):
+    def check_and_display_task_delay(self, task, interval, task_date, initial_task_date):
         days_delay = (task_date - initial_task_date).days - interval['range'][0]
-
         if days_delay > interval['range'][1] - interval['range'][0]:
-            print(
-                "=============" * 4,
-                f"\nZadanie '{task['name']}' zostało przesunięte o {days_delay} dni,",
-                f"\nco przekracza dozwolony zakres od {interval['range'][0]} do {interval['range'][1]} dni.",
-                f"\nData zadania: {task_date.strftime('%Y-%m-%d')}."
-            )
+            self.data_presenter.display_task_delay(task['name'], days_delay, interval['range'], task_date)
 
     def can_schedule_task(self, task, task_date):
         return (self.is_date_available(task, task_date) and

@@ -1,15 +1,30 @@
 event_name: "#Zadania na dziś"
 task_phrase: 'Zadania'
 history_dir: 'history'
-max_tasks_per_day: 8
+max_tasks_per_day: 10
 event_time:
   start: "8:00"
   end: "9:00"
-$START_DATE: "2023-11-22"
+$START_DATE: "2023-10-30"
 event_horizon: "2023-12-06"
 
 tasks:
-  - name: "Zasada 5 sekund"
+  - name: "coś tam7"
+    category: "1"
+    start_date: $START_DATE
+    intervals:
+      - range: [1, 1]
+        repetitions: 4
+      - range: [2, 4]
+        repetitions: 1
+      - range: [9, 16]
+        repetitions: 1
+      - range: [30, 35]
+        repetitions: 1
+    avoid_days:
+      weekdays: [5, 6]
+      dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
+  - name: "coś tam6"
     category: "1"
     start_date: $START_DATE
     intervals:
@@ -24,9 +39,8 @@ tasks:
     avoid_days:
       weekdays: [5, 6]
       dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
-
-  - name: "Nie oczekuj nagrody - nie szukaj nagród. Pozbądź się pleasure seeking behaviour"
-    category: "2"
+  - name: "coś tam5"
+    category: "1"
     start_date: $START_DATE
     intervals:
       - range: [1, 1]
@@ -40,13 +54,9 @@ tasks:
     avoid_days:
       weekdays: [5, 6]
       dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
-
-  - name: "Wizualizacja wzorców zachowań przed jakimś spotkaniem - [2+2 min]"
-    notes:
-      - "Jesteś silny - zajmujesz dużo miejsca, wyprostowany, zdolny do agresji, jesteś gorylem"
-      - "Jezusowy - Błogosław ludziom w okół, to były kiedyś dzieci, często skrzywdzone"
-    category: "3"
-    start_date: "2023-10-22"
+  - name: "coś tam3"
+    category: "1"
+    start_date: $START_DATE
     intervals:
       - range: [1, 1]
         repetitions: 1
@@ -59,10 +69,9 @@ tasks:
     avoid_days:
       weekdays: [5, 6]
       dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
-
-  - name: "Zwracaj się do ludzi po imieniu"
-    category: "4"
-    start_date: "2023-10-22"
+  - name: "coś tam2"
+    category: "1"
+    start_date: $START_DATE
     intervals:
       - range: [1, 1]
         repetitions: 1
@@ -75,123 +84,3 @@ tasks:
     avoid_days:
       weekdays: [5, 6]
       dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
-  - name: "Uważaj na rozmowach z przyjaciółmi je też najlepiej przerywaj odpoczynkiem w toalecie na przykład max 1.5h w ciągu"
-    category: "4"
-    start_date: "2023-10-22"
-    intervals:
-      - range: [1, 1]
-        repetitions: 1
-      - range: [2, 4]
-        repetitions: 1
-      - range: [9, 16]
-        repetitions: 1
-      - range: [30, 35]
-        repetitions: 1
-    avoid_days:
-      weekdays: [5, 6]
-      dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
-
-  - name: "Nie tłumacz się ludziom, po prostu rób. A w to miejsce słuchaj ludzi i ich podsumowuj"
-    category: "6"
-    start_date: "2023-10-22"
-    intervals:
-      - range: [1, 1]
-        repetitions: 1
-      - range: [2, 4]
-        repetitions: 1
-      - range: [9, 16]
-        repetitions: 1
-      - range: [30, 35]
-        repetitions: 1
-    avoid_days:
-      weekdays: [5, 6]
-      dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
-
-  - name: "Przytul Paulinę na koniec pracy"
-    category: "6"
-    start_date: "2023-10-22"
-    intervals:
-      - range: [1, 1]
-        repetitions: 1
-      - range: [2, 4]
-        repetitions: 1
-      - range: [9, 16]
-        repetitions: 1
-      - range: [30, 35]
-        repetitions: 1
-    avoid_days:
-      weekdays: [5, 6]
-      dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
-
-  - name: "Narzędzie - stres jako przyjaciel"
-    category: "7"
-    start_date: "2023-10-22"
-    intervals:
-      - range: [1, 1]
-        repetitions: 1
-      - range: [2, 4]
-        repetitions: 1
-      - range: [9, 16]
-        repetitions: 1
-      - range: [30, 35]
-        repetitions: 1
-    avoid_days:
-      weekdays: [5, 6]
-      dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
-
-  - name: "Docenianie ludzi w okół za najdrobniejsze rzeczy"
-    category: "8"
-    start_date: "2023-10-22"
-    intervals:
-      - range: [1, 1]
-        repetitions: 1
-      - range: [2, 4]
-        repetitions: 1
-      - range: [9, 16]
-        repetitions: 1
-      - range: [30, 35]
-        repetitions: 1
-    avoid_days:
-      weekdays: [5, 6]
-      dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
-
-  - name: "Najpierw słuchaj, aby czuli się zrozumiani, potem mów."
-    category: "9"
-    start_date: "2023-10-22"
-    intervals:
-      - range: [1, 1]
-        repetitions: 1
-      - range: [2, 4]
-        repetitions: 1
-      - range: [9, 16]
-        repetitions: 1
-      - range: [30, 35]
-        repetitions: 1
-    avoid_days:
-      weekdays: [5, 6]
-      dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
-
-  - name: "Wysyłaj podsumowania spotkań"
-    category: "10"
-    start_date: "2023-10-22"
-    intervals:
-      - range: [1, 1]
-        repetitions: 1
-      - range: [2, 4]
-        repetitions: 1
-      - range: [9, 16]
-        repetitions: 1
-      - range: [30, 35]
-        repetitions: 1
-    avoid_days:
-      weekdays: [5, 6]
-      dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
-
-  - name: "dzień dobroci"
-    category: "11"
-    start_date: "2023-10-22"
-    intervals:
-      - range: [6, 10]
-        repetitions: 1
-    avoid_days:
-      dates: ["2023-11-23", "2023-11-24", "2023-11-25", "2023-11-26", "2023-11-27"]

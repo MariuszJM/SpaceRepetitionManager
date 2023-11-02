@@ -44,6 +44,14 @@ class DataPresenter:
         rows.pop()
         return rows
 
+    def display_task_delay(self, task_name, days_delay, allowed_range, task_date):
+        print(
+            "=============" * 4,
+            f"\nZadanie '{task_name}' zostało przesunięte o {days_delay} dni,",
+            f"\nco przekracza dozwolony zakres od {allowed_range[0]} do {allowed_range[1]} dni.",
+            f"\nData zadania: {task_date.strftime('%Y-%m-%d')}."
+        )
+
     def format_content(self, date_str, tasks_data):
         formatted_date = date_str.replace('-', '_')
         action = self.get_action(tasks_data)
