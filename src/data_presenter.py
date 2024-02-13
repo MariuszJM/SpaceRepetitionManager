@@ -1,19 +1,23 @@
 from tabulate import tabulate
 from datetime import datetime, timedelta
+from typing import Dict, List
 
 
 class DataPresenter:
+    """Handles the presentation layer for task scheduling data, including displaying tasks in a tabulated format."""
 
-    def display_tasks(self, tasks_data):
+    def display_tasks(self, tasks_data: Dict[str, List[Dict]]) -> None:
+        """Displays tasks in a structured table format."""
         if not tasks_data:
-            self.display_message("Brak danych do wyświetlenia.")
+            self.display_message("No data to display.")
             return
 
         tasks_display_data = self.prepare_tasks_display_data(tasks_data)
         self.print_tasks_table(tasks_display_data)
 
-    def prepare_tasks_display_data(self, tasks_data):
-        weekdays = [" ", "PN", "WT", "ŚR", "CZ", "PT", "SB", "ND"]
+    def prepare_tasks_display_data(self, tasks_data: Dict[str, List[Dict]]) -> List[List[str]]:
+        """Prepares task data for display in a table format, returning a list of rows for the table."""
+        weekdays = [" ", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         sorted_dates = sorted(tasks_data.keys())
         first_date = datetime.strptime(sorted_dates[0], "%Y-%m-%d")
         last_date = datetime.strptime(sorted_dates[-1], "%Y-%m-%d")
@@ -44,7 +48,9 @@ class DataPresenter:
         rows.pop()
         return rows
 
-    def display_task_delay(self, task_name, days_delay, allowed_range, task_date):
+    def display_task_delay(self, task_name: str, days_delay: int, allowed_range: List[int],
+                           task_date: datetime) -> None:
+        """Displays a message indicating that a task has been delayed beyond its allowed range."""
         formatted_task_name = self.replace_spaces_with_underscores(task_name)
         formatted_task_date = task_date.strftime('%Y_%m_%d')
         print(
@@ -54,7 +60,8 @@ class DataPresenter:
             f"\nData zadania: {formatted_task_date}."
         )
 
-    def format_content(self, date_str, tasks_data):
+    def format_content(self, date_str: str, tasks_data: List[Dict]) -> str:
+        """Formats task data into a string for display."""
         formatted_date = date_str.replace('-', '_')
         action = self.get_action(tasks_data)
         if action:
@@ -77,6 +84,7 @@ class DataPresenter:
         print(message)
 
     def replace_spaces_with_underscores(self, content):
+        """Replaces spaces in a string with underscores, used for formatting content."""
         lines = content.split('\n')
         underscored_lines = ['_'.join(line.split()) for line in lines]
         return '\n'.join(underscored_lines)

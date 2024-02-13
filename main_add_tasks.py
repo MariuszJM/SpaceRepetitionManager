@@ -7,6 +7,12 @@ CALENDAR_ID = 'mariusz.michna.j@gmail.com'
 CONFIG_FILE = 'config.yaml'
 
 def main():
+    """
+        Main function to orchestrate the task scheduling and insertion into Google Calendar.
+
+        Utilizes GoogleCalendar for calendar interactions, DataPresenter for displaying tasks,
+        and TaskScheduler for scheduling tasks based on configuration.
+    """
     google_calendar = GoogleCalendar(calendar_id=CALENDAR_ID, credentials_file=CREDENTIALS_FILE)
     data_presenter = DataPresenter()
     task_scheduler = TaskScheduler(CONFIG_FILE, google_calendar, data_presenter)

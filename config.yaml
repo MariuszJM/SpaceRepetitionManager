@@ -25,34 +25,34 @@ tasks:
       weekdays: [6, 5]
       dates: []
 
-#  - name: "Siłownia borek"
-#    category: "exercise"
-#    start_date:  $START_DATE
-#    intervals:
-#      - range: [ 1, 1 ]
-#        repetitions: 1
-#      - range: [3, 3]
-#        repetitions: 7
-#    avoid_days:
-#      weekdays: [6]
-#
-#  - name: "Siłownia dom"
-#    category: "exercise"
-#    start_date:  $START_DATE
-#    intervals:
-#      - range: [ 1, 1 ]
-#        repetitions: 1
-#      - range: [ 3, 3 ]
-#        repetitions: 7
-#    avoid_days:
-#      weekdays: [ 6]
-#  - name: "Zone 2 - 45 min"
-#    category: "exercise"
-#    start_date:  $START_DATE
-#    intervals:
-#      - range: [ 1, 1 ]
-#        repetitions: 1
-#      - range: [ 4, 4 ]
-#        repetitions: 14
-#    avoid_days:
-#      weekdays: [ 6]
+  - name: "Siłownia borek"
+    category: "exercise"
+    start_date:  $START_DATE
+    intervals:
+      - range: [ 1, 1 ]
+        repetitions: 1
+      - range: [3, 3]
+        repetitions: 7
+    avoid_days:
+      weekdays: [6]
+
+  - name: "Siłownia dom"
+    category: "exercise"
+    start_date:  $START_DATE
+    intervals:
+      - range: [ 1, 1 ]
+        repetitions: 1
+      - range: [ 3, 3 ]
+        repetitions: 7
+    avoid_days:
+      weekdays: [ 6]
+  - name: "Zone 2 - 45 min"
+    category: "exercise"
+    start_date:  $START_DATE
+    intervals:
+      - range: [ 1, 1 ]
+        repetitions: 1
+      - range: [ 4, 4 ]
+        repetitions: 14
+    avoid_days:
+      weekdays: [ 6]

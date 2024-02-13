@@ -3,10 +3,14 @@ from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 import os
 from collections import defaultdict
+from typing import Dict, Any
 
 
 class TaskScheduler:
-    def __init__(self, config_file, google_calendar, data_presenter):
+    """Manages task scheduling, including loading configurations, scheduling tasks, and interacting with Google Calendar."""
+
+    def __init__(self, config_file: str, google_calendar: Any, data_presenter: Any) -> None:
+        """Initializes task scheduler with config file, calendar interface, and data presenter."""
         self.config = self.load_config(config_file)
         self.calendar = google_calendar
         self.data_presenter = data_presenter
@@ -16,31 +20,33 @@ class TaskScheduler:
         self.history_dir = self.config.get('history_dir', 'history')
         os.makedirs(self.history_dir, exist_ok=True)
 
-    def load_config(self, config_file):
+    def load_config(self, config_file: str) -> Dict[str, Any]:
+        """Loads task configuration from a YAML file."""
         with open(config_file, 'r') as file:
             config_raw = yaml.safe_load(file)
             config = self.interpolate_config(config_raw)
             return config
 
-    def interpolate_config(self, config):
+    def interpolate_config(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """Interpolates variables within the configuration dictionary."""
         global_vars = {k: v for k, v in config.items() if k.startswith("$")}
-
         def interpolate_value(value):
             if isinstance(value, str) and value.startswith("$"):
-                return global_vars.get(value, value)  # Zwróć wartość zmiennej globalnej lub oryginalną wartość
+                return global_vars.get(value, value)
             elif isinstance(value, list):
                 return [interpolate_value(v) for v in value]
             elif isinstance(value, dict):
                 return {k: interpolate_value(v) for k, v in value.items()}
             else:
                 return value
-
         return interpolate_value(config)
 
-    def set_event_horizon(self):
+    def set_event_horizon(self) -> None:
+        """Sets the scheduling limit based on the event horizon from the configuration."""
         self.event_horizon = datetime.fromisoformat(self.config['event_horizon'])
 
-    def create_scheduled_tasks(self):
+    def create_scheduled_tasks(self) -> None:
+        """Schedules tasks based on configuration intervals and limitations."""
         for task in self.config['tasks']:
             self.schedule_task(task)
 
