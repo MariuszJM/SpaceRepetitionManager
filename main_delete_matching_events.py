@@ -34,9 +34,9 @@ def main():
     task_scheduler = TaskScheduler(config_file, google_calendar, data_presenter)
 
     matching_events = task_scheduler.get_matching_events(
-        pattern="#Zadania na dziś",
-        start_date="2023-10-10",
-        end_date="2023-12-20"
+        pattern="Lot:",
+        start_date="2023-11-10",
+        end_date="2024-01-20"
     )
 
     display_matching_events(matching_events)

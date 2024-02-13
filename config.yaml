@@ -1,46 +1,16 @@
 event_name: "#Zadania na dziś"
 task_phrase: 'Zadania'
 history_dir: 'history'
-max_tasks_per_day: 10
+max_tasks_per_day: 16
 event_time:
   start: "8:00"
   end: "9:00"
-$START_DATE: "2023-10-30"
-event_horizon: "2023-12-06"
+$START_DATE: "2024-02-05"
+event_horizon: "2024-07-17"
 
 tasks:
-  - name: "coś tam7"
-    category: "1"
-    start_date: $START_DATE
-    intervals:
-      - range: [1, 1]
-        repetitions: 4
-      - range: [2, 4]
-        repetitions: 1
-      - range: [9, 16]
-        repetitions: 1
-      - range: [30, 35]
-        repetitions: 1
-    avoid_days:
-      weekdays: [5, 6]
-      dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
-  - name: "coś tam6"
-    category: "1"
-    start_date: $START_DATE
-    intervals:
-      - range: [7, 8]
-        repetitions: 1
-      - range: [2, 4]
-        repetitions: 1
-      - range: [9, 16]
-        repetitions: 1
-      - range: [30, 35]
-        repetitions: 1
-    avoid_days:
-      weekdays: [5, 6]
-      dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
-  - name: "coś tam5"
-    category: "1"
+  - name: $START_DATE
+    category: "XXX"
     start_date: $START_DATE
     intervals:
       - range: [1, 1]
@@ -52,35 +22,37 @@ tasks:
       - range: [30, 35]
         repetitions: 1
     avoid_days:
-      weekdays: [5, 6]
-      dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
-  - name: "coś tam3"
-    category: "1"
-    start_date: $START_DATE
-    intervals:
-      - range: [1, 1]
-        repetitions: 1
-      - range: [2, 4]
-        repetitions: 1
-      - range: [9, 16]
-        repetitions: 1
-      - range: [30, 35]
-        repetitions: 1
-    avoid_days:
-      weekdays: [5, 6]
-      dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
-  - name: "coś tam2"
-    category: "1"
-    start_date: $START_DATE
-    intervals:
-      - range: [1, 1]
-        repetitions: 1
-      - range: [2, 4]
-        repetitions: 1
-      - range: [9, 16]
-        repetitions: 1
-      - range: [30, 35]
-        repetitions: 1
-    avoid_days:
-      weekdays: [5, 6]
-      dates: ["2023-11-23", "2023-11-24", "2023-11-27"]
+      weekdays: [6, 5]
+      dates: []
+
+#  - name: "Siłownia borek"
+#    category: "exercise"
+#    start_date:  $START_DATE
+#    intervals:
+#      - range: [ 1, 1 ]
+#        repetitions: 1
+#      - range: [3, 3]
+#        repetitions: 7
+#    avoid_days:
+#      weekdays: [6]
+#
+#  - name: "Siłownia dom"
+#    category: "exercise"
+#    start_date:  $START_DATE
+#    intervals:
+#      - range: [ 1, 1 ]
+#        repetitions: 1
+#      - range: [ 3, 3 ]
+#        repetitions: 7
+#    avoid_days:
+#      weekdays: [ 6]
+#  - name: "Zone 2 - 45 min"
+#    category: "exercise"
+#    start_date:  $START_DATE
+#    intervals:
+#      - range: [ 1, 1 ]
+#        repetitions: 1
+#      - range: [ 4, 4 ]
+#        repetitions: 14
+#    avoid_days:
+#      weekdays: [ 6]
