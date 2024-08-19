@@ -1,16 +1,16 @@
 event_name: "#Zadania"
 task_phrase: 'Zadania'
 history_dir: 'history'
-max_tasks_per_day: 12
+max_tasks_per_day: 2
 event_time:
   start: "8:00"
   end: "9:00"
 start_date: "tomorrow"
 intervals:
-      - range: [1, 1]
-      - range: [2, 4]
-      - range: [9, 16]
-      - range: [30, 35]
+  - [1, 1]
+  - [2, 4]
+  - [9, 16]
+  - [30, 35]
 tasks:
   - name: Linux
     avoid_days:
