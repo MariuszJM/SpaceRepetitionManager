@@ -43,7 +43,7 @@ class TaskScheduler:
 
     def schedule_task(self, task):
         task_date = self.start_date
-        for interval in task['intervals']:
+        for interval in self.config['intervals']:
             if task_date is not None:
                 task_date = self.schedule_task_for_interval(task, interval, task_date)
 

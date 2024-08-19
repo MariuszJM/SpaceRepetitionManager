@@ -6,10 +6,7 @@ event_time:
   start: "8:00"
   end: "9:00"
 start_date: "tomorrow"
-
-tasks:
-  - name: Linux
-    intervals:
+intervals:
       - range: [1, 1]
         repetitions: 1
       - range: [2, 4]
@@ -18,19 +15,12 @@ tasks:
         repetitions: 1
       - range: [30, 35]
         repetitions: 1
+tasks:
+  - name: Linux
     avoid_days:
       weekdays: [6]
       dates: []
   - name: Python
-    intervals:
-      - range: [1, 1]
-        repetitions: 1
-      - range: [2, 4]
-        repetitions: 1
-      - range: [9, 16]
-        repetitions: 1
-      - range: [30, 35]
-        repetitions: 1
     avoid_days:
       weekdays: [6]
       dates: []
