@@ -5,7 +5,8 @@ max_tasks_per_day: 12
 event_time:
   start: "8:00"
   end: "9:00"
-$START_DATE: "2024-08-19"
+$START_DATE: "tomorrow"
+start_date: $START_DATE
 
 tasks:
   - name: Linux

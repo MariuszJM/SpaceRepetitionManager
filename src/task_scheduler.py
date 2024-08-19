@@ -14,6 +14,7 @@ class TaskScheduler:
         self.config = self.load_config(config_file)
         self.calendar = google_calendar
         self.data_presenter = data_presenter
+        self.set_start_date()
         self.scheduled_tasks = {}
         self.last_history_id = ''
         self.history_dir = self.config.get('history_dir', 'history')
@@ -45,10 +46,18 @@ class TaskScheduler:
         for task in self.config['tasks']:
             self.schedule_task(task)
 
-    def schedule_task(self, task):
-        start_date = datetime.fromisoformat(task['start_date'])
-        task_date = start_date
+    def set_start_date(self) -> None:
+        if self.config['start_date'].lower() == 'tomorrow':
+            self.start_date = datetime.now() 
+        elif self.config['start_date'].lower() == 'today':
+            self.start_date = datetime.now() 
+        else:
+            self.start_date = datetime.fromisoformat(
+                self.config["start_date"]
+            ) - timedelta(days=1)
 
+    def schedule_task(self, task):
+        task_date = self.start_date
         for interval in task['intervals']:
             if task_date is not None:
                 task_date = self.schedule_task_for_interval(task, interval, task_date)
