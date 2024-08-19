@@ -8,13 +8,9 @@ event_time:
 start_date: "tomorrow"
 intervals:
       - range: [1, 1]
-        repetitions: 1
       - range: [2, 4]
-        repetitions: 1
       - range: [9, 16]
-        repetitions: 1
       - range: [30, 35]
-        repetitions: 1
 tasks:
   - name: Linux
     avoid_days:

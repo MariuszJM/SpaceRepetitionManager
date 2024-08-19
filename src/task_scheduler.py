@@ -48,17 +48,16 @@ class TaskScheduler:
                 task_date = self.schedule_task_for_interval(task, interval, task_date)
 
     def schedule_task_for_interval(self, task, interval, task_date):
-        for _ in range(interval['repetitions']):
-            initial_task_date = task_date
-            task_date += timedelta(days=interval['range'][0])
+        initial_task_date = task_date
+        task_date += timedelta(days=interval['range'][0])
 
-            task_date = self.get_next_task_date(task, task_date)
+        task_date = self.get_next_task_date(task, task_date)
 
-            if task_date is None:
-                return task_date
+        if task_date is None:
+            return task_date
 
-            self.check_and_display_task_delay(task, interval, task_date, initial_task_date)
-            self._add_task_to_schedule(task_date, task)
+        self.check_and_display_task_delay(task, interval, task_date, initial_task_date)
+        self._add_task_to_schedule(task_date, task)
         return task_date
 
     def get_next_task_date(self, task, task_date):
