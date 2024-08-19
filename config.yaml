@@ -1,16 +1,15 @@
-event_name: "#Zadania na dziś"
+event_name: "#Zadania"
 task_phrase: 'Zadania'
 history_dir: 'history'
-max_tasks_per_day: 16
+max_tasks_per_day: 12
 event_time:
   start: "8:00"
   end: "9:00"
-$START_DATE: "2024-02-05"
-event_horizon: "2024-07-17"
+$START_DATE: "2024-08-19"
+event_horizon: "2024-12-30"
 
 tasks:
-  - name: $START_DATE
-    category: "XXX"
+  - name: Linux
     start_date: $START_DATE
     intervals:
       - range: [1, 1]
@@ -22,37 +21,19 @@ tasks:
       - range: [30, 35]
         repetitions: 1
     avoid_days:
-      weekdays: [6, 5]
+      weekdays: [6]
       dates: []
-
-  - name: "Siłownia borek"
-    category: "exercise"
-    start_date:  $START_DATE
+  - name: Python
+    start_date: $START_DATE
     intervals:
-      - range: [ 1, 1 ]
+      - range: [1, 1]
         repetitions: 1
-      - range: [3, 3]
-        repetitions: 7
+      - range: [2, 4]
+        repetitions: 1
+      - range: [9, 16]
+        repetitions: 1
+      - range: [30, 35]
+        repetitions: 1
     avoid_days:
       weekdays: [6]
-
-  - name: "Siłownia dom"
-    category: "exercise"
-    start_date:  $START_DATE
-    intervals:
-      - range: [ 1, 1 ]
-        repetitions: 1
-      - range: [ 3, 3 ]
-        repetitions: 7
-    avoid_days:
-      weekdays: [ 6]
-  - name: "Zone 2 - 45 min"
-    category: "exercise"
-    start_date:  $START_DATE
-    intervals:
-      - range: [ 1, 1 ]
-        repetitions: 1
-      - range: [ 4, 4 ]
-        repetitions: 14
-    avoid_days:
-      weekdays: [ 6]
+      dates: []

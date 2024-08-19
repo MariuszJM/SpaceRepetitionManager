@@ -2,25 +2,28 @@ from src.google_calendar import GoogleCalendar
 from src.task_scheduler import TaskScheduler
 from src.data_presenter import DataPresenter
 
-CREDENTIALS_FILE = 'credentials.json'
-CALENDAR_ID = 'mariusz.michna.j@gmail.com'
-CONFIG_FILE = 'config.yaml'
+CREDENTIALS_FILE = "credentials.json"
+CALENDAR_ID = "mariusz.michna.j@gmail.com"
+CONFIG_FILE = "config.yaml"
+
 
 def main():
     """
-        Main function to orchestrate the task scheduling and insertion into Google Calendar.
+    Main function to orchestrate the task scheduling and insertion into Google Calendar.
 
-        Utilizes GoogleCalendar for calendar interactions, DataPresenter for displaying tasks,
-        and TaskScheduler for scheduling tasks based on configuration.
+    Utilizes GoogleCalendar for calendar interactions, DataPresenter for displaying tasks,
+    and TaskScheduler for scheduling tasks based on configuration.
     """
-    google_calendar = GoogleCalendar(calendar_id=CALENDAR_ID, credentials_file=CREDENTIALS_FILE)
+    google_calendar = GoogleCalendar(
+        calendar_id=CALENDAR_ID, credentials_file=CREDENTIALS_FILE
+    )
     data_presenter = DataPresenter()
     task_scheduler = TaskScheduler(CONFIG_FILE, google_calendar, data_presenter)
     task_scheduler.create_scheduled_tasks()
     print("Zaplanowane zadania:")
     task_scheduler.display_scheduled_tasks()
     confirm = input("\nCzy chcesz dodać powyższe zadania do kalendarza Google? (t/n): ")
-    if confirm.lower() == 't':
+    if confirm.lower() == "t":
         task_scheduler.add_tasks_to_calendar()
         print("Zadania zostały dodane do kalendarza.")
     else:
@@ -29,3 +32,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    print("Zaplanowane zadania") 

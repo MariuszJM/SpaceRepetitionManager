@@ -88,16 +88,11 @@ class TaskScheduler:
 
     def can_schedule_task(self, task, task_date):
         return (self.is_date_available(task, task_date) and
-                self.is_category_available(task, task_date) and
                 self.is_within_max_tasks_limit(task, task_date))
 
     def is_date_available(self, task, task_date):
         return (task_date.weekday() not in task['avoid_days'].get('weekdays', []) and
                 task_date not in task['avoid_days'].get('dates', []))
-
-    def is_category_available(self, task, task_date):
-        date_str = task_date.strftime("%Y-%m-%d")
-        return not any(t['category'] == task['category'] for t in self.scheduled_tasks.get(date_str, []))
 
     def is_within_max_tasks_limit(self, task, task_date):
         max_tasks_per_day = self.config.get('max_tasks_per_day', None)
