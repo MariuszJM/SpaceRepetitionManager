@@ -5,12 +5,10 @@ max_tasks_per_day: 12
 event_time:
   start: "8:00"
   end: "9:00"
-$START_DATE: "tomorrow"
-start_date: $START_DATE
+start_date: "tomorrow"
 
 tasks:
   - name: Linux
-    start_date: $START_DATE
     intervals:
       - range: [1, 1]
         repetitions: 1
@@ -24,7 +22,6 @@ tasks:
       weekdays: [6]
       dates: []
   - name: Python
-    start_date: $START_DATE
     intervals:
       - range: [1, 1]
         repetitions: 1

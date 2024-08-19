@@ -23,23 +23,8 @@ class TaskScheduler:
     def load_config(self, config_file: str) -> Dict[str, Any]:
         """Loads task configuration from a YAML file."""
         with open(config_file, 'r') as file:
-            config_raw = yaml.safe_load(file)
-            config = self.interpolate_config(config_raw)
+            config = yaml.safe_load(file)
             return config
-
-    def interpolate_config(self, config: Dict[str, Any]) -> Dict[str, Any]:
-        """Interpolates variables within the configuration dictionary."""
-        global_vars = {k: v for k, v in config.items() if k.startswith("$")}
-        def interpolate_value(value):
-            if isinstance(value, str) and value.startswith("$"):
-                return global_vars.get(value, value)
-            elif isinstance(value, list):
-                return [interpolate_value(v) for v in value]
-            elif isinstance(value, dict):
-                return {k: interpolate_value(v) for k, v in value.items()}
-            else:
-                return value
-        return interpolate_value(config)
 
     def create_scheduled_tasks(self) -> None:
         """Schedules tasks based on configuration intervals and limitations."""
