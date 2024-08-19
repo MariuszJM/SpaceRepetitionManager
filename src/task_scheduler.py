@@ -15,7 +15,6 @@ class TaskScheduler:
         self.calendar = google_calendar
         self.data_presenter = data_presenter
         self.scheduled_tasks = {}
-        self.set_event_horizon()
         self.last_history_id = ''
         self.history_dir = self.config.get('history_dir', 'history')
         os.makedirs(self.history_dir, exist_ok=True)
@@ -40,10 +39,6 @@ class TaskScheduler:
             else:
                 return value
         return interpolate_value(config)
-
-    def set_event_horizon(self) -> None:
-        """Sets the scheduling limit based on the event horizon from the configuration."""
-        self.event_horizon = datetime.fromisoformat(self.config['event_horizon'])
 
     def create_scheduled_tasks(self) -> None:
         """Schedules tasks based on configuration intervals and limitations."""
@@ -75,10 +70,6 @@ class TaskScheduler:
     def get_next_task_date(self, task, task_date):
         while not self.can_schedule_task(task, task_date):
             task_date += timedelta(days=1)
-            if task_date > self.event_horizon:
-                return None
-        if task_date > self.event_horizon:
-            return None
         return task_date
 
     def check_and_display_task_delay(self, task, interval, task_date, initial_task_date):

@@ -6,7 +6,6 @@ event_time:
   start: "8:00"
   end: "9:00"
 $START_DATE: "2024-08-19"
-event_horizon: "2024-12-30"
 
 tasks:
   - name: Linux
