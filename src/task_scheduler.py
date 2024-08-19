@@ -51,7 +51,7 @@ class TaskScheduler:
         initial_task_date = task_date
         task_date += timedelta(days=interval[0])
 
-        task_date = self.get_next_task_date(task, task_date)
+        task_date = self.get_next_task_date(task_date)
 
         if task_date is None:
             return task_date
@@ -60,8 +60,8 @@ class TaskScheduler:
         self._add_task_to_schedule(task_date, task)
         return task_date
 
-    def get_next_task_date(self, task, task_date):
-        while not self.can_schedule_task(task, task_date):
+    def get_next_task_date(self, task_date):
+        while not self.can_schedule_task(task_date):
             task_date += timedelta(days=1)
         return task_date
 
@@ -70,15 +70,17 @@ class TaskScheduler:
         if days_to_next_event > interval[1]:
             self.data_presenter.display_task_delay(task['name'], days_to_next_event, interval, task_date)
 
-    def can_schedule_task(self, task, task_date):
-        return (self.is_date_available(task, task_date) and
-                self.is_within_max_tasks_limit(task, task_date))
+    def can_schedule_task(self, task_date):
+        return (self.is_date_available(task_date) and
+                self.is_within_max_tasks_limit(task_date))
 
-    def is_date_available(self, task, task_date):
-        return (task_date.weekday() not in task['avoid_days'].get('weekdays', []) and
-                task_date not in task['avoid_days'].get('dates', []))
+    def is_date_available(self, task_date):
+        avoid_days = self.config["avoid_days"]
+        return task_date.weekday() not in avoid_days.get(
+            "weekdays", []
+        ) and task_date not in avoid_days.get("dates", [])
 
-    def is_within_max_tasks_limit(self, task, task_date):
+    def is_within_max_tasks_limit(self, task_date):
         max_tasks_per_day = self.config.get('max_tasks_per_day', None)
         if max_tasks_per_day is not None:
             date_str = task_date.strftime("%Y-%m-%d")

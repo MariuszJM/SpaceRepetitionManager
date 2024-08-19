@@ -11,12 +11,9 @@ intervals:
   - [2, 4]
   - [9, 16]
   - [30, 35]
+avoid_days:
+  weekdays: [6]
+  dates: []
 tasks:
   - name: Linux
-    avoid_days:
-      weekdays: [6]
-      dates: []
   - name: Python
-    avoid_days:
-      weekdays: [6]
-      dates: []
