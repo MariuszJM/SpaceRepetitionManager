@@ -60,7 +60,7 @@ class DataPresenter:
             f"\nData zadania: {formatted_task_date}."
         )
 
-    def format_content(self, date_str: str, tasks_data: List[Dict]) -> str:
+    def format_content(self, date_str: str, tasks_data: List[str]) -> str:
         """Formats task data into a string for display."""
         formatted_date = date_str.replace('-', '_')
         action = self.get_action(tasks_data)
@@ -69,7 +69,7 @@ class DataPresenter:
             task_names_newline = task_names.replace(', ', '\n')
             return f"{formatted_date}\n{action}\n{task_names_newline}"
 
-        task_names = '\n'.join([task['name'] for task in tasks_data])
+        task_names = "\n".join([task_name for task_name in tasks_data])
         return f"{formatted_date}\n{task_names}"
 
     def get_action(self, tasks_data):

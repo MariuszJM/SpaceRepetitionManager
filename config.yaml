@@ -15,5 +15,4 @@ avoid_days:
   weekdays: [6]
   dates: []
 tasks:
-  - name: Linux
-  - name: Python
+  - '19_08'

@@ -28,8 +28,8 @@ class TaskScheduler:
 
     def create_scheduled_tasks(self) -> None:
         """Schedules tasks based on configuration intervals and limitations."""
-        for task in self.config['tasks']:
-            self.schedule_task(task)
+        for task_name in self.config['tasks']:
+            self.schedule_task(task_name)
 
     def set_start_date(self) -> None:
         if self.config['start_date'].lower() == 'tomorrow':
@@ -41,13 +41,15 @@ class TaskScheduler:
                 self.config["start_date"]
             ) - timedelta(days=1)
 
-    def schedule_task(self, task):
+    def schedule_task(self, task_name):
         task_date = self.start_date
         for interval in self.config['intervals']:
             if task_date is not None:
-                task_date = self.schedule_task_for_interval(task, interval, task_date)
+                task_date = self.schedule_task_for_interval(
+                    task_name, interval, task_date
+                )
 
-    def schedule_task_for_interval(self, task, interval, task_date):
+    def schedule_task_for_interval(self, task_name, interval, task_date):
         initial_task_date = task_date
         task_date += timedelta(days=interval[0])
 
@@ -56,8 +58,10 @@ class TaskScheduler:
         if task_date is None:
             return task_date
 
-        self.check_and_display_task_delay(task, interval, task_date, initial_task_date)
-        self._add_task_to_schedule(task_date, task)
+        self.check_and_display_task_delay(
+            task_name, interval, task_date, initial_task_date
+        )
+        self._add_task_to_schedule(task_date, task_name)
         return task_date
 
     def get_next_task_date(self, task_date):
@@ -65,10 +69,14 @@ class TaskScheduler:
             task_date += timedelta(days=1)
         return task_date
 
-    def check_and_display_task_delay(self, task, interval, task_date, initial_task_date):
+    def check_and_display_task_delay(
+        self, task_name, interval, task_date, initial_task_date
+    ):
         days_to_next_event = (task_date - initial_task_date).days
         if days_to_next_event > interval[1]:
-            self.data_presenter.display_task_delay(task['name'], days_to_next_event, interval, task_date)
+            self.data_presenter.display_task_delay(
+                task_name, days_to_next_event, interval, task_date
+            )
 
     def can_schedule_task(self, task_date):
         return (self.is_date_available(task_date) and
@@ -104,11 +112,11 @@ class TaskScheduler:
         tasks = soup.find_all('li')
         return len(tasks)
 
-    def _add_task_to_schedule(self, date, task):
+    def _add_task_to_schedule(self, date, task_name):
         date_str = date.strftime("%Y-%m-%d")
         if date_str not in self.scheduled_tasks:
             self.scheduled_tasks[date_str] = []
-        self.scheduled_tasks[date_str].append(task)
+        self.scheduled_tasks[date_str].append(task_name)
 
     def display_scheduled_tasks(self):
         self.data_presenter.display_tasks(self.scheduled_tasks)
@@ -205,9 +213,9 @@ class TaskScheduler:
 
     def _prepare_added_tasks_record(self, date_str, tasks, event_exists):
         return {
-            'date': date_str,
-            'tasks': [task['name'] for task in tasks],
-            'updated_existing_event': event_exists
+            "date": date_str,
+            "tasks": [task_name for task_name in tasks],
+            "updated_existing_event": event_exists,
         }
 
     def _prepare_undo_data(self, task_info_date):
