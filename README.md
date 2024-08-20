@@ -44,7 +44,6 @@ This project automates the scheduling of tasks in Google Calendar, specifically 
 2. **Run the Script:**
     
     ```bash
-    bashSkopiuj kod
     python main_add_tasks.py
     
     ```
@@ -59,7 +58,6 @@ To undo the last set of task additions:
 1. **Run the undo script:**
     
     ```bash
-    bashSkopiuj kod
     python main_undo_tasks.py
     
     ```
