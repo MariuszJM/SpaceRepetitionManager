@@ -203,7 +203,7 @@ class TaskScheduler:
 
     def _create_event_description(self, tasks):
         """Creates a description for the event from the list of tasks."""
-        return "\n".join([f"- {task['name']}" for task in tasks])
+        return "\n".join([f"- {task_name}" for task_name in tasks])
 
     def _get_event_start_end_time(self, date):
         """Gets the start and end time for an event."""
