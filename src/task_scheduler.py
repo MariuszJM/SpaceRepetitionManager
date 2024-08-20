@@ -188,7 +188,7 @@ class TaskScheduler:
             tasks = yaml.safe_load(file)
 
         for task_info in tasks:
-            date, end_date, existing_day_events = self._prepare_undo_data(
+            existing_day_events = self._prepare_undo_data(
                 task_info["date"]
             )
 
@@ -266,7 +266,7 @@ class TaskScheduler:
             .isoformat()
         )
         existing_day_events = self.calendar.get_events(date, end_date)
-        return date, end_date, existing_day_events
+        return existing_day_events
 
     def _process_event_undo(self, task_info, event):
         """Processes the undo of an event by either updating or deleting it."""
