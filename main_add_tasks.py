@@ -20,16 +20,16 @@ def main():
     data_presenter = DataPresenter()
     task_scheduler = TaskScheduler(CONFIG_FILE, google_calendar, data_presenter)
     task_scheduler.create_scheduled_tasks()
-    print("Zaplanowane zadania:")
+    print("Scheduled tasks:")
     task_scheduler.display_scheduled_tasks()
-    confirm = input("\nCzy chcesz dodać powyższe zadania do kalendarza Google? (t/n): ")
-    if confirm.lower() == "t":
+    confirm = input("\nDo you want to add the above tasks to Google Calendar? (y/n): ")
+    if confirm.lower() == "y":
         task_scheduler.add_tasks_to_calendar()
-        print("Zadania zostały dodane do kalendarza.")
+        print("Tasks have been added to the calendar.")
     else:
-        print("Zadania nie zostały dodane do kalendarza.")
+        print("Tasks were not added to the calendar.")
 
 
 if __name__ == "__main__":
     main()
-    print("Zaplanowane zadania") 
+    print("Scheduled tasks")

@@ -5,7 +5,7 @@ max_tasks_per_day: 2
 event_time:
   start: "8:00"
   end: "9:00"
-start_date: "tomorrow"
+start_date: "today"
 intervals:
   - [1, 1]
   - [2, 4]
